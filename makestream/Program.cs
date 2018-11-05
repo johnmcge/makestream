@@ -23,15 +23,34 @@ namespace makestream
                 return;
             }
 
+            List<string> ListOfFileNamesToProcess = new List<string>();
+
+            if (args[0] == "*")
+            {
+                DirectoryInfo d = new DirectoryInfo(Directory.GetCurrentDirectory());
+                FileInfo[] Files = d.GetFiles("*.mp4");
+                foreach (FileInfo fi in Files)
+                {
+                    ListOfFileNamesToProcess.Add(fi.Name);
+                }
+            }
+            else
+            {
+                foreach (string paramPassedIn in args)
+                {
+                    ListOfFileNamesToProcess.Add(paramPassedIn);
+                }
+            }
+
             int i = 0;
-            foreach (string fileToProcess in args)
+            foreach (string fileToProcess in ListOfFileNamesToProcess)
             {
                 i++;
                 if (!File.Exists(fileToProcess))
                     Console.WriteLine(Environment.NewLine + "File not found: " + fileToProcess);
                 else
                 {
-                    Console.WriteLine("  Processing " + i.ToString() + " of " + args.Length.ToString() + " videos");
+                    Console.WriteLine("  Processing " + i.ToString() + " of " + ListOfFileNamesToProcess.Count.ToString() + " videos");
                     ProcessVideoFile(fileToProcess);
                 }
             }
